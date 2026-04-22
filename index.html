@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VocabDeck — Hafal Kata</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --cream: #f5f0e8;
+    --paper: #faf7f2;
+    --amber: #d4830a;
+    --amber-light: #f5a623;
+    --amber-pale: #fef3d8;
+    --sage: #4a7c59;
+    --sage-light: #e8f2eb;
+    --rust: #c0392b;
+    --rust-light: #fde8e6;
+    --slate: #5a6478;
+    --border: #d9d0c0;
+    --shadow: rgba(26,18,8,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(212,131,10,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(74,124,89,0.06) 0%, transparent 50%);
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--amber-light); }
+  nav { display: flex; gap: 0.5rem; }
+  nav button {
+    background: transparent;
+    border: 1.5px solid rgba(245,240,232,0.25);
+    color: var(--cream);
+    padding: 0.45rem 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  nav button:hover, nav button.active {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: white;
+  }
+
+  /* ── PAGES ── */
+  .page { display: none; padding: 2rem; max-width: 860px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* ── HOME ── */
+  .hero {
+    text-align: center;
+    padding: 3rem 0 2rem;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-family: 'Lora', serif;
+    color: var(--amber);
+  }
+  .hero p {
+    color: var(--slate);
+    font-size: 0.9rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .stat-box {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--amber);
+    display: block;
+  }
+  .stat-box .lbl {
+    font-size: 0.72rem;
+    color: var(--slate);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .action-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .action-card {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px var(--shadow);
+    border-color: var(--amber);
+  }
+  .action-card .icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .action-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .action-card p {
+    font-size: 0.78rem;
+    color: var(--slate);
+    line-height: 1.4;
+  }
+
+  .btn-reset {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--rust-light);
+    border: 1.5px solid var(--rust);
+    color: var(--rust);
+    padding: 0.6rem 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    margin: 0 auto;
+  }
+  .btn-reset:hover { background: var(--rust); color: white; }
+
+  /* ── INPUT PAGE ── */
+  .input-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .input-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .progress-pill {
+    background: var(--amber-pale);
+    border: 1.5px solid var(--amber);
+    color: var(--amber);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .target-setup {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .target-setup label {
+    font-size: 0.82rem;
+    color: var(--slate);
+  }
+  .target-setup input[type=number] {
+    width: 80px;
+    padding: 0.5rem;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    text-align: center;
+    background: var(--cream);
+  }
+  .btn-primary {
+    background: var(--amber);
+    color: white;
+    border: none;
+    padding: 0.55rem 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--ink); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--slate);
+    border: 1.5px solid var(--border);
+    padding: 0.55rem 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
+
+  .word-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .word-slot {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .word-slot:focus-within { border-color: var(--amber); }
+  .slot-num {
+    font-size: 0.7rem;
+    color: var(--slate);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .slot-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .slot-row input, .desc-row input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    background: var(--cream);
+    transition: border-color 0.2s;
+  }
+  .slot-row input:focus, .desc-row input:focus {
+    outline: none;
+    border-color: var(--amber);
+  }
+  .slot-row input::placeholder, .desc-row input::placeholder { color: #bbb; }
+  .desc-row input { font-style: italic; font-size: 0.78rem; }
+  .desc-label { font-size: 0.7rem; color: var(--slate); margin-bottom: 0.25rem; }
+
+  .input-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+
+  /* ── FLASHCARD ── */
+  .fc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .fc-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .fc-controls { display: flex; gap: 0.5rem; align-items: center; }
+  .fc-counter {
+    font-size: 0.78rem;
+    color: var(--slate);
+    padding: 0.3rem 0.75rem;
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+  }
+
+  .flashcard-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .flashcard-wrap {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 480px;
+    height: 260px;
+    cursor: pointer;
+  }
+  .flashcard {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .fc-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+  .fc-front {
+    background: var(--ink);
+    color: var(--cream);
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+  .fc-back {
+    background: var(--amber-pale);
+    border: 2px solid var(--amber);
+    transform: rotateY(180deg);
+  }
+  .fc-front .word {
+    font-family: 'Lora', serif;
+    font-size: 2.2rem;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+  .fc-back .word {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .fc-front .hint {
+    font-size: 0.72rem;
+    opacity: 0.4;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .fc-back .desc {
+    font-size: 0.8rem;
+    color: var(--slate);
+    font-style: italic;
+    font-family: 'Lora', serif;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+  .fc-back .local-label {
+    font-size: 0.7rem;
+    color: var(--amber);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .fc-nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .btn-nav {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: var(--paper);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-nav:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+  .fc-progress-bar {
+    width: 100%;
+    max-width: 480px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .fc-progress-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+
+  .fc-all-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 1rem;
+  }
+  .fc-mini {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .fc-mini:hover { border-color: var(--amber); background: var(--amber-pale); }
+  .fc-mini .foreign { font-family: 'Lora', serif; font-style: italic; font-size: 0.9rem; }
+  .fc-mini .local { font-size: 0.75rem; color: var(--slate); margin-top: 0.25rem; }
+
+  /* ── QUIZ ── */
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .quiz-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .score-badge {
+    background: var(--sage-light);
+    border: 1.5px solid var(--sage);
+    color: var(--sage);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+  }
+
+  .quiz-card {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .quiz-q-label {
+    font-size: 0.7rem;
+    color: var(--slate);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .quiz-word {
+    font-family: 'Lora', serif;
+    font-size: 2.5rem;
+    font-style: italic;
+    margin-bottom: 0.25rem;
+  }
+  .quiz-desc {
+    font-size: 0.8rem;
+    color: var(--slate);
+    font-style: italic;
+    margin-bottom: 2rem;
+    min-height: 1.2em;
+  }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .option-btn {
+    background: var(--cream);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--amber); background: var(--amber-pale); }
+  .option-btn .opt-letter {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: white;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .option-btn.correct { border-color: var(--sage) !important; background: var(--sage-light) !important; }
+  .option-btn.correct .opt-letter { background: var(--sage); }
+  .option-btn.wrong { border-color: var(--rust) !important; background: var(--rust-light) !important; }
+  .option-btn.wrong .opt-letter { background: var(--rust); }
+  .option-btn:disabled { cursor: default; }
+
+  .quiz-result {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    min-height: 1.5em;
+  }
+  .quiz-result.correct { color: var(--sage); }
+  .quiz-result.wrong { color: var(--rust); }
+
+  .quiz-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.25rem;
+  }
+  .quiz-progress-text { font-size: 0.75rem; color: var(--slate); }
+
+  .quiz-summary {
+    text-align: center;
+    padding: 3rem 2rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .summary-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--amber);
+    line-height: 1;
+  }
+  .summary-sub { color: var(--slate); font-size: 0.85rem; margin: 0.75rem 0 2rem; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--slate);
+  }
+  .empty-state .emoji { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--ink); }
+  .empty-state p { font-size: 0.82rem; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--ink);
+    color: var(--cream);
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    font-size: 0.82rem;
+    transition: transform 0.3s;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .action-cards { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+    .slot-row { grid-template-columns: 1fr; }
+    .options { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Vocab<span>Deck</span></div>
+  <nav>
+    <button onclick="showPage('home')" id="nav-home" class="active">Beranda</button>
+    <button onclick="showPage('input')" id="nav-input">Input Kata</button>
+    <button onclick="showPage('flashcard')" id="nav-flashcard">Flashcard</button>
+    <button onclick="showPage('quiz')" id="nav-quiz">Tebak Kata</button>
+  </nav>
+</header>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <h1>Hafal kata,<br><em>lebih cepat.</em></h1>
+    <p>Input kata → latih dengan flashcard → uji dengan kuis pilihan ganda</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="num" id="stat-total">0</span>
+      <span class="lbl">Total Kata</span>
+    </div>
+    <div class="stat-box">
+      <span class="num" id="stat-target">—</span>
+      <span class="lbl">Target</span>
+    </div>
+    <div class="stat-box">
+      <span class="num" id="stat-progress">0%</span>
+      <span class="lbl">Progress</span>
+    </div>
+  </div>
+
+  <div class="action-cards">
+    <div class="action-card" onclick="showPage('flashcard')">
+      <span class="icon">🃏</span>
+      <h3>Flashcard</h3>
+      <p>Klik kartu untuk membalik dan melihat terjemahan. Latih hafalan visual.</p>
+    </div>
+    <div class="action-card" onclick="showPage('quiz')">
+      <span class="icon">🎯</span>
+      <h3>Tebak Kata</h3>
+      <p>Uji hafalan dengan soal pilihan ganda A, B, C dari daftar kosakata.</p>
+    </div>
+    <div class="action-card" onclick="showPage('input')">
+      <span class="icon">✏️</span>
+      <h3>Input Kata</h3>
+      <p>Tambah atau edit daftar kosakata yang ingin dihafal beserta deskripsinya.</p>
+    </div>
+    <div class="action-card" id="card-browse" onclick="showPage('flashcard')">
+      <span class="icon">📚</span>
+      <h3>Semua Kata</h3>
+      <p>Lihat seluruh daftar kosakata yang sudah diinput dalam satu tampilan.</p>
+    </div>
+  </div>
+
+  <button class="btn-reset" onclick="confirmReset()">
+    🗑 Reset Semua Data
+  </button>
+</div>
+
+<!-- ══════════ INPUT ══════════ -->
+<div id="page-input" class="page">
+  <div class="input-header">
+    <h2>Input Kata</h2>
+    <span class="progress-pill" id="input-progress-pill">0 / 0</span>
+  </div>
+
+  <div class="target-setup">
+    <label>Target kata:</label>
+    <input type="number" id="target-input" min="1" max="200" value="10" />
+    <button class="btn-primary" onclick="setTarget()">Set Target</button>
+    <span id="target-status" style="font-size:0.78rem;color:var(--slate)"></span>
+  </div>
+
+  <div class="word-slots" id="word-slots"></div>
+
+  <div class="input-actions">
+    <button class="btn-secondary" onclick="showPage('home')">← Kembali</button>
+    <button class="btn-primary" onclick="saveWords()">💾 Simpan</button>
+  </div>
+</div>
+
+<!-- ══════════ FLASHCARD ══════════ -->
+<div id="page-flashcard" class="page">
+  <div class="fc-header">
+    <h2>Flashcard</h2>
+    <div class="fc-controls">
+      <span class="fc-counter" id="fc-counter">0 / 0</span>
+      <button class="btn-secondary" onclick="shuffleCards()" style="font-size:0.75rem;padding:0.4rem 0.8rem">🔀 Acak</button>
+    </div>
+  </div>
+
+  <div id="fc-empty" class="empty-state" style="display:none">
+    <div class="emoji">📭</div>
+    <h3>Belum ada kata</h3>
+    <p>Masuk ke menu <strong>Input Kata</strong> dan tambahkan kosakata terlebih dahulu.</p>
+  </div>
+
+  <div id="fc-content">
+    <div class="flashcard-area">
+      <div class="flashcard-wrap" onclick="flipCard()">
+        <div class="flashcard" id="flashcard">
+          <div class="fc-face fc-front">
+            <div class="word" id="fc-foreign">—</div>
+            <div class="hint">klik untuk membalik</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="local-label">terjemahan</div>
+            <div class="word" id="fc-local">—</div>
+            <div class="desc" id="fc-desc"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc-progress-bar">
+        <div class="fc-progress-fill" id="fc-prog-fill" style="width:0%"></div>
+      </div>
+
+      <div class="fc-nav">
+        <button class="btn-nav" onclick="prevCard()">←</button>
+        <button class="btn-nav" onclick="nextCard()">→</button>
+      </div>
+    </div>
+
+    <div class="fc-all-grid" id="fc-all-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════ QUIZ ══════════ -->
+<div id="page-quiz" class="page">
+  <div class="quiz-header">
+    <h2>Tebak Kata</h2>
+    <span class="score-badge" id="score-badge">Skor: 0</span>
+  </div>
+
+  <div id="quiz-empty" class="empty-state" style="display:none">
+    <div class="emoji">📭</div>
+    <h3>Belum ada kata</h3>
+    <p>Masuk ke menu <strong>Input Kata</strong> dan tambahkan minimal 3 kosakata.</p>
+  </div>
+
+  <div id="quiz-content" style="display:none">
+    <div class="quiz-card">
+      <div class="quiz-q-label">Apa arti kata berikut?</div>
+      <div class="quiz-word" id="quiz-word">—</div>
+      <div class="quiz-desc" id="quiz-desc"></div>
+      <div class="options" id="quiz-options"></div>
+      <div class="quiz-result" id="quiz-result"></div>
+      <div class="quiz-actions">
+        <span class="quiz-progress-text" id="quiz-progress-text"></span>
+        <button class="btn-primary" id="btn-next-q" onclick="nextQuestion()" style="display:none">Berikutnya →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz-summary" class="quiz-summary" style="display:none">
+    <div class="summary-score" id="summary-score"></div>
+    <div class="summary-sub" id="summary-sub"></div>
+    <button class="btn-primary" onclick="startQuiz()" style="margin-right:0.5rem">🔄 Ulangi</button>
+    <button class="btn-secondary" onclick="showPage('home')">← Beranda</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────
+let words = [];        // [{foreign, local, desc}]
+let target = 10;
+let fcIndex = 0;
+let fcOrder = [];
+let quizIndex = 0;
+let quizOrder = [];
+let score = 0;
+let answered = false;
+
+const LS_WORDS  = 'vocabdeck_words';
+const LS_TARGET = 'vocabdeck_target';
+
+function load() {
+  const w = localStorage.getItem(LS_WORDS);
+  const t = localStorage.getItem(LS_TARGET);
+  words  = w ? JSON.parse(w) : [];
+  target = t ? parseInt(t) : 10;
+}
+function save() {
+  localStorage.setItem(LS_WORDS, JSON.stringify(words));
+  localStorage.setItem(LS_TARGET, target);
+}
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ─────────────────────────────────────────
+//  NAVIGATION
+// ─────────────────────────────────────────
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  document.getElementById('nav-' + p).classList.add('active');
+  if (p === 'home')      renderHome();
+  if (p === 'input')     renderInput();
+  if (p === 'flashcard') renderFlashcard();
+  if (p === 'quiz')      initQuiz();
+}
+
+// ─────────────────────────────────────────
+//  HOME
+// ─────────────────────────────────────────
+function renderHome() {
+  const filled = words.filter(w => w.foreign && w.local).length;
+  document.getElementById('stat-total').textContent  = filled;
+  document.getElementById('stat-target').textContent = target;
+  document.getElementById('stat-progress').textContent =
+    target > 0 ? Math.round((filled / target) * 100) + '%' : '0%';
+}
+
+function confirmReset() {
+  if (confirm('Reset semua data kata dan target? Tindakan ini tidak bisa dibatalkan.')) {
+    localStorage.removeItem(LS_WORDS);
+    localStorage.removeItem(LS_TARGET);
+    words = []; target = 10;
+    renderHome();
+    toast('✓ Data berhasil direset');
+  }
+}
+
+// ─────────────────────────────────────────
+//  INPUT
+// ─────────────────────────────────────────
+function setTarget() {
+  const val = parseInt(document.getElementById('target-input').value);
+  if (!val || val < 1) { toast('⚠ Target minimal 1 kata'); return; }
+  target = val;
+  save();
+  renderInput();
+  toast('✓ Target diset ke ' + target + ' kata');
+}
+
+function renderInput() {
+  document.getElementById('target-input').value = target;
+  const container = document.getElementById('word-slots');
+  container.innerHTML = '';
+
+  // ensure words array has `target` slots
+  while (words.length < target) words.push({ foreign: '', local: '', desc: '' });
+  // trim if needed (don't remove filled words though)
+  // just show target slots
+  const show = Math.max(target, words.filter(w=>w.foreign||w.local).length);
+
+  for (let i = 0; i < target; i++) {
+    const w = words[i] || { foreign: '', local: '', desc: '' };
+    container.innerHTML += `
+      <div class="word-slot">
+        <div class="slot-num">Kata #${i + 1}</div>
+        <div class="slot-row">
+          <input type="text" placeholder="Kata asing (foreign)" id="f-${i}" value="${esc(w.foreign)}" />
+          <input type="text" placeholder="Terjemahan (local)" id="l-${i}" value="${esc(w.local)}" />
+        </div>
+        <div class="desc-row">
+          <div class="desc-label">Deskripsi (opsional)</div>
+          <input type="text" placeholder="Contoh penggunaan atau penjelasan singkat..." id="d-${i}" value="${esc(w.desc)}" />
+        </div>
+      </div>`;
+  }
+  updateInputProgress();
+}
+
+function updateInputProgress() {
+  const filled = words.filter(w => w.foreign && w.local).length;
+  document.getElementById('input-progress-pill').textContent = `${filled} / ${target}`;
+}
+
+function saveWords() {
+  const arr = [];
+  for (let i = 0; i < target; i++) {
+    arr.push({
+      foreign: (document.getElementById(`f-${i}`)?.value || '').trim(),
+      local:   (document.getElementById(`l-${i}`)?.value || '').trim(),
+      desc:    (document.getElementById(`d-${i}`)?.value || '').trim(),
+    });
+  }
+  words = arr;
+  save();
+  updateInputProgress();
+  toast('✓ Tersimpan di browser');
+}
+
+function esc(s) { return (s||'').replace(/"/g, '&quot;'); }
+
+// ─────────────────────────────────────────
+//  FLASHCARD
+// ─────────────────────────────────────────
+function renderFlashcard() {
+  const valid = words.filter(w => w.foreign && w.local);
+  if (!valid.length) {
+    document.getElementById('fc-empty').style.display = 'block';
+    document.getElementById('fc-content').style.display = 'none';
+    return;
+  }
+  document.getElementById('fc-empty').style.display = 'none';
+  document.getElementById('fc-content').style.display = 'block';
+
+  if (!fcOrder.length || fcOrder.length !== valid.length) {
+    fcOrder = valid.map((_, i) => i);
+    fcIndex = 0;
+  }
+  showCard();
+  renderMiniGrid(valid);
+}
+
+function showCard() {
+  const valid = words.filter(w => w.foreign && w.local);
+  const card  = document.getElementById('flashcard');
+  card.classList.remove('flipped');
+  const w = valid[fcOrder[fcIndex]];
+  document.getElementById('fc-foreign').textContent = w.foreign;
+  document.getElementById('fc-local').textContent   = w.local;
+  document.getElementById('fc-desc').textContent    = w.desc || '';
+  document.getElementById('fc-counter').textContent = `${fcIndex + 1} / ${valid.length}`;
+  const pct = ((fcIndex + 1) / valid.length) * 100;
+  document.getElementById('fc-prog-fill').style.width = pct + '%';
+}
+
+function flipCard()  { document.getElementById('flashcard').classList.toggle('flipped'); }
+function nextCard()  { const n = words.filter(w=>w.foreign&&w.local).length; fcIndex = (fcIndex+1)%n; showCard(); }
+function prevCard()  { const n = words.filter(w=>w.foreign&&w.local).length; fcIndex = (fcIndex-1+n)%n; showCard(); }
+function shuffleCards() {
+  const valid = words.filter(w=>w.foreign&&w.local);
+  fcOrder = valid.map((_,i)=>i).sort(()=>Math.random()-0.5);
+  fcIndex = 0;
+  showCard();
+  toast('🔀 Kartu diacak!');
+}
+
+function renderMiniGrid(valid) {
+  const grid = document.getElementById('fc-all-grid');
+  grid.innerHTML = valid.map((w, i) => `
+    <div class="fc-mini" onclick="jumpCard(${i})">
+      <div class="foreign">${w.foreign}</div>
+      <div class="local">${w.local}</div>
+    </div>`).join('');
+}
+
+function jumpCard(i) {
+  fcIndex = i;
+  fcOrder = words.filter(w=>w.foreign&&w.local).map((_,j)=>j);
+  showCard();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─────────────────────────────────────────
+//  QUIZ
+// ─────────────────────────────────────────
+function initQuiz() {
+  const valid = words.filter(w => w.foreign && w.local);
+  document.getElementById('quiz-empty').style.display   = valid.length < 2 ? 'block' : 'none';
+  document.getElementById('quiz-content').style.display = valid.length >= 2 ? 'block' : 'none';
+  document.getElementById('quiz-summary').style.display = 'none';
+  if (valid.length >= 2) startQuiz();
+}
+
+function startQuiz() {
+  const valid = words.filter(w => w.foreign && w.local);
+  quizOrder = valid.map((_,i)=>i).sort(()=>Math.random()-0.5);
+  quizIndex = 0;
+  score = 0;
+  document.getElementById('quiz-content').style.display = 'block';
+  document.getElementById('quiz-summary').style.display = 'none';
+  updateScoreBadge();
+  showQuestion();
+}
+
+function showQuestion() {
+  const valid = words.filter(w => w.foreign && w.local);
+  const qi    = quizOrder[quizIndex];
+  const word  = valid[qi];
+  answered    = false;
+
+  document.getElementById('quiz-word').textContent = word.foreign;
+  document.getElementById('quiz-desc').textContent = word.desc || '';
+  document.getElementById('quiz-result').className = 'quiz-result';
+  document.getElementById('quiz-result').innerHTML = '';
+  document.getElementById('btn-next-q').style.display = 'none';
+  document.getElementById('quiz-progress-text').textContent =
+    `${quizIndex + 1} / ${quizOrder.length}`;
+
+  // build options: correct + 2 random wrong
+  const correctLocal = word.local;
+  const pool = valid.filter((_,i) => i !== qi).map(w => w.local);
+  const shufflePool = pool.sort(() => Math.random() - 0.5);
+  const wrongs = shufflePool.slice(0, 2);
+  const opts   = [correctLocal, ...wrongs].sort(() => Math.random() - 0.5);
+  const letters = ['A', 'B', 'C'];
+
+  const container = document.getElementById('quiz-options');
+  container.innerHTML = opts.map((opt, i) => `
+    <button class="option-btn" onclick="checkAnswer(this, '${esc2(opt)}', '${esc2(correctLocal)}')">
+      <span class="opt-letter">${letters[i]}</span>
+      ${opt}
+    </button>`).join('');
+}
+
+function esc2(s) { return s.replace(/'/g,"&#39;").replace(/"/g,'&quot;'); }
+
+function checkAnswer(btn, chosen, correct) {
+  if (answered) return;
+  answered = true;
+  const opts = document.querySelectorAll('.option-btn');
+  opts.forEach(b => {
+    b.disabled = true;
+    const txt = b.textContent.trim().replace(/^[ABC]\s*/,'').replace(/\s+/g,' ').trim();
+    if (txt === correct) b.classList.add('correct');
+  });
+
+  const chosenTxt = btn.textContent.trim().replace(/^[ABC]\s*/,'').replace(/\s+/g,' ').trim();
+  const isRight   = chosenTxt === correct;
+  if (!isRight) btn.classList.add('wrong');
+
+  const resEl = document.getElementById('quiz-result');
+  if (isRight) {
+    score++;
+    resEl.className = 'quiz-result correct';
+    resEl.innerHTML = '✓ Benar!';
+  } else {
+    resEl.className = 'quiz-result wrong';
+    resEl.innerHTML = `✗ Salah. Jawaban: <strong>${correct}</strong>`;
+  }
+  updateScoreBadge();
+  document.getElementById('btn-next-q').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  quizIndex++;
+  if (quizIndex >= quizOrder.length) {
+    showSummary();
+  } else {
+    showQuestion();
+  }
+}
+
+function showSummary() {
+  document.getElementById('quiz-content').style.display  = 'none';
+  document.getElementById('quiz-summary').style.display  = 'block';
+  const total = quizOrder.length;
+  const pct   = Math.round((score / total) * 100);
+  document.getElementById('summary-score').textContent = `${score}/${total}`;
+  let msg = pct >= 80 ? '🎉 Luar biasa! Hafalan kamu kuat.' :
+            pct >= 50 ? '👍 Lumayan! Terus berlatih.' :
+                        '💪 Semangat! Coba flashcard dulu.';
+  document.getElementById('summary-sub').textContent = `${pct}% benar — ${msg}`;
+}
+
+function updateScoreBadge() {
+  document.getElementById('score-badge').textContent = `Skor: ${score}`;
+}
+
+// ─────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────
+load();
+renderHome();
+</script>
+</body>
+</html>
